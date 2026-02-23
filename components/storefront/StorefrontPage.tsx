@@ -8,11 +8,11 @@ import {
   StoreTab,
   filterBySubcategory,
   filterProductsByTab,
-  getBadgeText,
   getFallbackProductImage,
   getProductImageUrl,
   MENU_CONFIG,
 } from "../../utils/storefront";
+import ModernProductCard from "./ModernProductCard";
 
 interface StorefrontPageProps {
   products: Product[];
@@ -144,40 +144,17 @@ const StorefrontPage = ({
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {displayedProducts.map((product) => (
-              <article
+              <div
                 key={product.id}
-                className="overflow-hidden rounded-2xl border border-[#d7e2d0] bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_18px_rgba(0,0,0,0.13)]"
+                className="transition-all duration-200"
               >
-                <div className="relative h-44 bg-[#e6ecdf]">
-                  <img
-                    src={getProductImageUrl(product)}
-                    alt={product.name}
-                    className="h-full w-full object-cover"
-                    onError={(event) => {
-                      event.currentTarget.src = getFallbackProductImage(product.category);
-                    }}
-                  />
-                  <span className="absolute right-2 top-2 rounded-full bg-[#1c8f4c] px-2 py-0.5 text-xs font-bold text-white">
-                    {getBadgeText(product)}
-                  </span>
-                </div>
-                <div className="p-3">
-                  <p className="line-clamp-2 text-xl font-bold text-[#1b2430]">{product.name}</p>
-                  <p className="mt-2 line-clamp-2 text-sm text-[#636e7c]">
-                    {product.description || "Reliable agriculture product for professional farm use."}
-                  </p>
-                  <div className="mt-3 flex items-center justify-between">
-                    <div>
-                      <p className="text-3xl font-black text-[#087443]">₹{Math.round(product.price).toLocaleString("en-IN")}</p>
-                    </div>
-                    <Link legacyBehavior href={{ pathname: tabRoute[activeTab], query: { q: product.name } }}>
-                      <a className="rounded-xl bg-[#0b7b42] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#076a37]">
-                        View Details
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              </article>
+                <ModernProductCard
+                  product={product}
+                  imageUrl={getProductImageUrl(product)}
+                  fallbackImageUrl={getFallbackProductImage(product.category)}
+                  detailsHref={`${tabRoute[activeTab]}?q=${encodeURIComponent(product.name || "")}`}
+                />
+              </div>
             ))}
           </div>
 
