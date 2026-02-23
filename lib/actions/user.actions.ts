@@ -19,6 +19,8 @@ import { count, desc, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { PAGE_SIZE } from '../constants'
+import { isDatabaseConfigured } from '../db-config'
+import { demoUser } from '../fallback-data'
 
 // USER
 export async function signUp(prevState: unknown, formData: FormData) {
@@ -105,6 +107,9 @@ export async function getAllUsers({
 }
 
 export async function getUserById(userId: string) {
+  if (!isDatabaseConfigured()) {
+    return demoUser(userId)
+  }
   const user = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users.id, userId),
   })
