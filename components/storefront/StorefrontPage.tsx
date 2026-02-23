@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import type { ReactElement } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { FaLeaf, FaSeedling, FaTools, FaTractor } from "react-icons/fa";
 import { Product } from "../../types/Product";
@@ -25,18 +26,11 @@ interface StorefrontPageProps {
   compactCards?: boolean;
 }
 
-const tabIcons: Record<StoreTab, JSX.Element> = {
+const tabIcons: Record<StoreTab, ReactElement> = {
   all: <FaLeaf />,
   machinery: <FaTractor />,
   mro: <FaTools />,
   seeds: <FaSeedling />,
-};
-
-const tabText: Record<StoreTab, string> = {
-  all: "All Categories",
-  machinery: "Agri Machineries",
-  mro: "MRO & Tools",
-  seeds: "Seeds & Fertilizers",
 };
 
 const tabRoute: Record<StoreTab, string> = {
@@ -94,7 +88,7 @@ const StorefrontPage = ({
       <div className="mx-auto max-w-[1280px] px-3 pb-10 pt-3 md:px-5">
         {showHero && (
           <section className="relative overflow-hidden rounded-xl border border-[#d9e2d2]">
-            <img src="/images/products/machinery-placeholder.jpg" alt="Agriculture hero" className="h-[310px] w-full object-cover" />
+            <img src="/images/products/machinery-placeholder.png" alt="Agriculture hero" className="h-[310px] w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/35 to-black/45" />
             <div className="absolute inset-x-0 top-[26%] px-4 text-center text-white">
               <p className="text-4xl font-black md:text-6xl">{heroTitle || "MODERN MACHINERIES"}</p>
@@ -110,7 +104,7 @@ const StorefrontPage = ({
             {MENU_CONFIG.map((item) => {
               const isSelected = activeTab === item.tab;
               return (
-                <Link key={item.tab} href={tabRoute[item.tab]}>
+                <Link legacyBehavior key={item.tab} href={tabRoute[item.tab]}>
                   <a
                     onMouseEnter={() => setActiveTab(item.tab)}
                     className={`rounded-2xl border bg-white px-4 py-4 transition-all duration-200 ${
@@ -143,7 +137,7 @@ const StorefrontPage = ({
               <p className="text-4xl font-black text-[#091f38] md:text-5xl">{headerTitle}</p>
               <p className="mt-1 text-xl text-[#5b6470] md:text-2xl">{headerSubtitle}</p>
             </div>
-            <Link href={tabRoute[activeTab]}>
+            <Link legacyBehavior href={tabRoute[activeTab]}>
               <a className="text-lg font-bold text-[#167f43] underline underline-offset-8 md:text-2xl">View All Products</a>
             </Link>
           </div>
@@ -176,7 +170,7 @@ const StorefrontPage = ({
                     <div>
                       <p className="text-3xl font-black text-[#087443]">₹{Math.round(product.price).toLocaleString("en-IN")}</p>
                     </div>
-                    <Link href={{ pathname: tabRoute[activeTab], query: { q: product.name } }}>
+                    <Link legacyBehavior href={{ pathname: tabRoute[activeTab], query: { q: product.name } }}>
                       <a className="rounded-xl bg-[#0b7b42] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#076a37]">
                         View Details
                       </a>
