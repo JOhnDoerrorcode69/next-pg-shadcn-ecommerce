@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
 
       <nav className="border-b border-[#42bf69] bg-[#20aa50] text-white">
         <div className="mx-auto flex max-w-[1280px] items-center gap-2 px-3 py-2 md:gap-4 md:px-5">
-          <Link href="/home">
+          <Link legacyBehavior href="/home">
             <a className="min-w-[208px]">
               <div className="leading-tight">
                 <p className="text-[20px] font-black italic tracking-tight">Bharat Krishi Mitra</p>
@@ -73,13 +73,13 @@ const Navbar: React.FC = () => {
           </form>
 
           <div className="hidden items-center gap-6 text-base font-semibold md:flex">
-            <Link href="/login">
+            <Link legacyBehavior href="/login">
               <a className="transition-colors hover:text-[#f8ffcb]">Login</a>
             </Link>
-            <Link href="/become-seller">
+            <Link legacyBehavior href="/become-seller">
               <a className="transition-colors hover:text-[#f8ffcb]">Become a Seller</a>
             </Link>
-            <Link href="/cart">
+            <Link legacyBehavior href="/cart">
               <a className="inline-flex items-center gap-2 transition-colors hover:text-[#f8ffcb]">
                 <FaShoppingCart />
                 Cart
@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
 
       <nav className="border-b border-[#2d3440] bg-[#1f2b3d] text-white">
         <div className="mx-auto flex max-w-[1280px] items-center gap-6 px-3 py-3 text-[17px] font-semibold md:px-5">
-          <Link href="/all">
+          <Link legacyBehavior href="/all">
             <a className="inline-flex items-center gap-2 whitespace-nowrap transition-colors hover:text-[#9effcb]">
               <FaBars className="text-sm" />
               All
@@ -123,14 +123,14 @@ const Navbar: React.FC = () => {
                   <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Top Categories</p>
                   <div className="mt-2 space-y-1 text-base font-semibold">
                     {menu.subcategories.map((sub) => (
-                      <Link key={sub.slug} href={{ pathname: menu.href, query: { sub: sub.slug } }}>
+                      <Link legacyBehavior key={sub.slug} href={{ pathname: menu.href, query: { sub: sub.slug } }}>
                         <a className="block rounded-md px-2 py-1.5 transition-colors hover:bg-[#edf7ef] hover:text-[#137b40]">
                           {sub.label}
                         </a>
                       </Link>
                     ))}
                   </div>
-                  <Link href={menu.href}>
+                  <Link legacyBehavior href={menu.href}>
                     <a className="mt-3 block rounded-lg bg-[#ecf7ef] px-3 py-2 text-sm font-bold text-[#148d47] transition-colors hover:bg-[#ddf2e3]">
                       View All {menu.label}
                     </a>
@@ -140,13 +140,13 @@ const Navbar: React.FC = () => {
             </div>
           ))}
 
-          <Link href="/best-sellers">
+          <Link legacyBehavior href="/best-sellers">
             <a className="whitespace-nowrap transition-colors hover:text-[#9effcb]">Best Sellers</a>
           </Link>
-          <Link href="/todays-deals">
+          <Link legacyBehavior href="/todays-deals">
             <a className="whitespace-nowrap transition-colors hover:text-[#9effcb]">Today&apos;s Deals</a>
           </Link>
-          <Link href="/customer-service">
+          <Link legacyBehavior href="/customer-service">
             <a className="whitespace-nowrap transition-colors hover:text-[#9effcb]">Customer Service</a>
           </Link>
         </div>
