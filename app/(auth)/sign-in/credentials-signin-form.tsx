@@ -23,10 +23,10 @@ export default function CredentialsSignInForm() {
     return (
       <Button
         disabled={pending}
-        className="w-full bg-green-600/80 hover:bg-green-600 backdrop-blur-lg text-white font-bold rounded-full py-3 mt-4 transition-all"
+        className="w-full bg-[#168a46] hover:bg-[#12723a] text-white font-bold rounded-full py-6 mt-2 shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
         variant="default"
       >
-        {pending ? 'Submitting...' : 'Sign In with credentials'}
+        {pending ? 'Submitting...' : 'Sign In'}
       </Button>
     )
   }
@@ -34,9 +34,9 @@ export default function CredentialsSignInForm() {
   return (
     <form action={action}>
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
-      <div className="space-y-6">
-        <div>
-          <Label htmlFor="email" className="text-white">
+      <div className="space-y-5">
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-gray-800 font-semibold ml-1">
             Email
           </Label>
           <Input
@@ -46,11 +46,11 @@ export default function CredentialsSignInForm() {
             required
             type="email"
             defaultValue={signInDefaultValues.email}
-            className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 rounded-xl px-4 py-3"
+            className="bg-white/60 border-0 focus-visible:ring-2 focus-visible:ring-[#168a46] text-gray-900 placeholder:text-gray-500 rounded-2xl px-5 py-6 shadow-sm"
           />
         </div>
-        <div>
-          <Label htmlFor="password" className="text-white">
+        <div className="space-y-2">
+          <Label htmlFor="password" className="text-gray-800 font-semibold ml-1">
             Password
           </Label>
           <Input
@@ -59,21 +59,25 @@ export default function CredentialsSignInForm() {
             required
             type="password"
             defaultValue={signInDefaultValues.password}
-            className="bg-white/10 border border-white/20 text-white placeholder:text-gray-300 rounded-xl px-4 py-3"
+            className="bg-white/60 border-0 focus-visible:ring-2 focus-visible:ring-[#168a46] text-gray-900 placeholder:text-gray-500 rounded-2xl px-5 py-6 shadow-sm"
           />
         </div>
-        <div>
+
+        <div className="pt-2">
           <SignInButton />
         </div>
 
         {data && !data.success && (
-          <div className="text-center text-red-300">{data.message}</div>
+          <div className="text-center text-red-600 bg-red-100/80 p-3 rounded-xl text-sm font-medium">
+            {data.message}
+          </div>
         )}
         {!data && (
-          <div className="text-center text-red-300">
+          <div className="text-center text-red-600 bg-red-100/80 p-3 rounded-xl text-sm font-medium">
             Unknown error happened.{' '}
             <Button
-              className="bg-white/10 border border-white/20 text-white hover:bg-white/20"
+              variant="link"
+              className="p-0 h-auto text-red-700 underline"
               onClick={() => window.location.reload()}
             >
               Please reload
@@ -81,11 +85,11 @@ export default function CredentialsSignInForm() {
           </div>
         )}
 
-        <div className="text-sm text-center text-white/80">
+        <div className="text-sm text-center text-gray-800 font-medium">
           Don&apos;t have an account?{' '}
           <Link
             target="_self"
-            className="font-semibold text-white underline underline-offset-4"
+            className="font-bold text-[#168a46] hover:underline"
             href={`/sign-up?callbackUrl=${encodeURIComponent(callbackUrl)}`}
           >
             Sign Up

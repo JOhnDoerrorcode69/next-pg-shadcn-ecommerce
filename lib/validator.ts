@@ -12,7 +12,8 @@ export const signInFormSchema = z.object({
 
 export const signUpFormSchema = z
   .object({
-    name: z.string().min(3, 'Name must be at least 3 characters'),
+    firstName: z.string().min(3, 'First name must be at least 3 characters'),
+    lastName: z.string().min(3, 'Last name must be at least 3 characters'),
     email: z.string().email().min(3, 'Email must be at least 3 characters'),
     password: z.string().min(3, 'Password must be at least 3 characters'),
     confirmPassword: z

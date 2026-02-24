@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import Image from 'next/image'
 
 import { auth } from '@/auth'
 import { APP_NAME } from '@/lib/constants'
@@ -24,21 +24,42 @@ export default async function SignIn({
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1592982537447-6f2a6a0a5b83?q=80&w=2000')] bg-cover bg-center bg-no-repeat p-6">
-      <div className="w-[360px] h-[750px] border-[12px] border-gray-900 rounded-[3.5rem] shadow-2xl relative overflow-hidden flex flex-col">
-        <div className="absolute left-1/2 top-3 z-10 h-5 w-32 -translate-x-1/2 rounded-full bg-gray-900/90" />
-        <div className="bg-black/40 backdrop-blur-md h-full w-full p-6 flex flex-col justify-center">
-          <div className="mb-8 text-center space-y-3">
-            <Link href="/home" className="inline-block text-white/90 text-sm font-semibold tracking-wide">
-              {APP_NAME}
-            </Link>
-            <h1 className="text-3xl font-bold text-white">Welcome Back</h1>
-            <p className="text-white/80 text-sm">
-              Sign in with your email and password
+    <div className="min-h-screen w-full flex items-center justify-center bg-[url('/farm-bg.jpg')] bg-cover bg-center bg-no-repeat p-6">
+      {/* Phone Glass Container */}
+      <div className="w-[380px] min-h-[750px] border-[8px] border-white/20 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col backdrop-blur-md bg-white/20">
+
+        {/* Notch/Top Bar */}
+        <div className="absolute left-1/2 top-4 z-10 h-6 w-32 -translate-x-1/2 rounded-full bg-black/10 backdrop-blur-sm" />
+
+        {/* Content Area */}
+        <div className="flex-1 flex flex-col px-8 pt-20 pb-10 overflow-y-auto no-scrollbar">
+
+          {/* Logo Section */}
+          <div className="flex flex-col items-center mb-10">
+            <div className="bg-white p-3 rounded-full shadow-lg mb-4">
+               <Image
+                src="/logo.png"
+                alt={`${APP_NAME} logo`}
+                width={48}
+                height={48}
+                className="w-12 h-12 object-contain"
+              />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Welcome Back!</h1>
+            <p className="text-gray-700 text-sm mt-1 font-medium">
+              Sign in to continue
             </p>
           </div>
-          <CredentialsSignInForm />
+
+          {/* Form Section */}
+          <div className="w-full space-y-4">
+            <CredentialsSignInForm />
+          </div>
+
         </div>
+
+        {/* Bottom Indicator */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-black/20 rounded-full" />
       </div>
     </div>
   )

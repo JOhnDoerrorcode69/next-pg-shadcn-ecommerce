@@ -161,11 +161,11 @@ const Home: NextPage<HomeProps> = ({ products }) => {
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/45 to-black/20" />
 
-            <div className="absolute left-8 top-1/4 z-10 text-white md:left-12">
-              <h1 className="text-5xl font-black leading-none md:text-8xl">{activeSlide.title}</h1>
-              <p className="mt-4 text-3xl font-semibold text-[#f6ad3a] md:text-6xl">{activeSlide.subtitle}</p>
+            <div className="absolute left-8 top-1/4 z-10 text-white md:left-12 max-w-[80%]">
+              <h1 className="text-4xl font-black leading-none md:text-6xl drop-shadow-lg">{activeSlide.title}</h1>
+              <p className="mt-2 text-xl font-semibold text-[#f6ad3a] md:text-4xl drop-shadow-md">{activeSlide.subtitle}</p>
               <Link legacyBehavior href={slideHref}>
-                <a className="mt-6 inline-block bg-white px-8 py-3 text-2xl font-black text-[#168a46] md:px-10 md:py-4 md:text-4xl">
+                <a className="mt-6 inline-block bg-white px-6 py-2 text-lg font-black text-[#168a46] md:px-8 md:py-3 md:text-2xl rounded-full hover:shadow-lg transition-transform hover:scale-105 active:scale-95">
                   {activeSlide.cta}
                 </a>
               </Link>
@@ -196,13 +196,13 @@ const Home: NextPage<HomeProps> = ({ products }) => {
                     key={tab.key}
                     type="button"
                     onClick={() => setActiveTab(tab.key)}
-                    className={`flex flex-col items-center px-4 py-6 transition-colors ${
-                      active ? "bg-[#edf3ee] text-[#2a9a59]" : "text-[#7a818c] hover:bg-[#f6f8f5]"
+                    className={`flex flex-col items-center px-4 py-6 transition-all duration-300 ease-in-out hover:-translate-y-1 active:scale-95 ${
+                      active ? "bg-[#edf3ee] text-[#2a9a59] shadow-inner" : "text-[#7a818c] hover:bg-[#f6f8f5] hover:shadow-md"
                     }`}
                   >
-                    <img src={tab.icon} alt={tab.label} className="h-16 w-16 rounded-full border-4 border-[#d6ddd0] object-cover" />
-                    <span className="mt-3 text-4xl font-black tracking-tight">{tab.label}</span>
-                    <span className={`mt-4 h-[5px] w-full ${active ? "bg-[#2a9a59]" : "bg-transparent"}`} />
+                    <img src={tab.icon} alt={tab.label} className="h-16 w-16 rounded-full border-4 border-[#d6ddd0] object-cover transition-transform duration-300 hover:scale-105" />
+                    <span className="mt-3 text-2xl font-black tracking-tight">{tab.label}</span>
+                    <span className={`mt-4 h-[5px] w-full transition-all duration-300 ${active ? "bg-[#2a9a59] scale-x-100" : "bg-transparent scale-x-0"}`} />
                   </button>
                 );
               })}
@@ -212,15 +212,15 @@ const Home: NextPage<HomeProps> = ({ products }) => {
           <section className="mt-8">
             <div className="flex items-end justify-between border-b border-[#dce4d6] pb-3">
               <div>
-                <h2 className="text-5xl font-black text-[#0b1d34] md:text-6xl">
+                <h2 className="text-3xl font-black text-[#0b1d34] md:text-4xl">
                   {sectionTitle} <span className="text-[#f2a22c]">•</span>
                 </h2>
-                <p className="mt-1 text-2xl font-bold uppercase tracking-[0.08em] text-[#9098a4] md:text-3xl">
+                <p className="mt-1 text-lg font-bold uppercase tracking-[0.08em] text-[#9098a4] md:text-xl">
                   Handpicked for your farm&apos;s success
                 </p>
               </div>
               <Link legacyBehavior href={viewAllHref}>
-                <a className="border-2 border-[#2a9a59] px-6 py-3 text-2xl font-black text-[#2a9a59] transition-colors hover:bg-[#2a9a59] hover:text-white md:text-3xl">
+                <a className="border-2 border-[#2a9a59] px-6 py-3 text-lg font-black text-[#2a9a59] transition-colors hover:bg-[#2a9a59] hover:text-white md:text-xl rounded-full">
                   VIEW ALL {activeTab === "machinery" ? "AGRI MACHINERIES" : activeTab === "mro" ? "MRO & TOOLS" : "SEEDS & FERTILIZERS"}
                 </a>
               </Link>
@@ -244,9 +244,9 @@ const Home: NextPage<HomeProps> = ({ products }) => {
                       </span>
                     )}
                   </div>
-                  <p className="mt-3 text-sm font-black uppercase tracking-[0.08em] text-[#7a838f]">{getBadgeText(product)}</p>
-                  <p className="line-clamp-2 text-2xl font-black text-[#102238]">{product.name}</p>
-                  <p className="mt-2 text-4xl font-black text-[#1a9953]">₹{Math.round(product.price).toLocaleString("en-IN")}</p>
+                  <p className="mt-3 text-xs font-bold uppercase tracking-[0.08em] text-[#7a838f]">{getBadgeText(product)}</p>
+                  <p className="line-clamp-2 text-lg font-bold text-[#102238]">{product.name}</p>
+                  <p className="mt-2 text-2xl font-black text-[#1a9953]">₹{Math.round(product.price).toLocaleString("en-IN")}</p>
                 </article>
               ))}
             </div>
@@ -254,7 +254,7 @@ const Home: NextPage<HomeProps> = ({ products }) => {
 
           <section className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-4">
             <div className="rounded-2xl border border-[#dbe3d3] bg-white p-4 lg:col-span-1">
-              <h3 className="text-4xl font-black text-[#102238]">DEALS OF THE DAY</h3>
+              <h3 className="text-2xl font-black text-[#102238]">DEALS OF THE DAY</h3>
               <div className="mt-4 space-y-3">
                 {dealProducts.map((deal) => (
                   <div key={deal.id} className="flex items-center gap-3 border-b border-[#edf1eb] pb-3 last:border-b-0 last:pb-0">
@@ -267,9 +267,9 @@ const Home: NextPage<HomeProps> = ({ products }) => {
                       }}
                     />
                     <div className="min-w-0">
-                      <p className="truncate text-xl font-bold text-[#1a2738]">{deal.name}</p>
-                      <p className="text-2xl font-black text-[#1a9953]">₹{Math.round(deal.price).toLocaleString("en-IN")}</p>
-                      <p className="text-sm font-bold uppercase tracking-[0.08em] text-[#f3a329]">Limited Time</p>
+                      <p className="truncate text-base font-bold text-[#1a2738]">{deal.name}</p>
+                      <p className="text-xl font-black text-[#1a9953]">₹{Math.round(deal.price).toLocaleString("en-IN")}</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.08em] text-[#f3a329]">Limited Time</p>
                     </div>
                   </div>
                 ))}
@@ -278,11 +278,11 @@ const Home: NextPage<HomeProps> = ({ products }) => {
 
             <div className="rounded-2xl border border-[#dbe3d3] bg-white p-4 lg:col-span-3">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="border-l-4 border-[#2aa45e] pl-3 text-5xl font-black text-[#102238] md:text-6xl">
+                <h3 className="border-l-4 border-[#2aa45e] pl-3 text-3xl font-black text-[#102238] md:text-4xl">
                   Trending in Farming Tech
                 </h3>
                 <Link legacyBehavior href="/best-sellers">
-                  <a className="text-3xl font-black text-[#2a9a59]">See More</a>
+                  <a className="text-lg font-black text-[#2a9a59] hover:underline">See More</a>
                 </Link>
               </div>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
@@ -298,9 +298,9 @@ const Home: NextPage<HomeProps> = ({ products }) => {
                         }}
                       />
                     </div>
-                    <p className="mt-3 text-sm font-black uppercase tracking-[0.08em] text-[#7a838f]">{getBadgeText(item)}</p>
-                    <p className="line-clamp-2 text-2xl font-black text-[#17263a]">{item.name}</p>
-                    <p className="mt-2 text-4xl font-black text-[#1a9953]">₹{Math.round(item.price).toLocaleString("en-IN")}</p>
+                    <p className="mt-3 text-xs font-bold uppercase tracking-[0.08em] text-[#7a838f]">{getBadgeText(item)}</p>
+                    <p className="line-clamp-2 text-lg font-bold text-[#17263a]">{item.name}</p>
+                    <p className="mt-2 text-2xl font-black text-[#1a9953]">₹{Math.round(item.price).toLocaleString("en-IN")}</p>
                   </article>
                 ))}
               </div>

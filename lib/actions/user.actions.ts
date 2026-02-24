@@ -25,7 +25,8 @@ import { demoUser } from '../fallback-data'
 export async function signUp(prevState: unknown, formData: FormData) {
   try {
     const user = signUpFormSchema.parse({
-      name: formData.get('name'),
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
       email: formData.get('email'),
       confirmPassword: formData.get('confirmPassword'),
       password: formData.get('password'),
@@ -44,7 +45,8 @@ export async function signUp(prevState: unknown, formData: FormData) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         password: user.password,
         confirmPassword: user.confirmPassword,
