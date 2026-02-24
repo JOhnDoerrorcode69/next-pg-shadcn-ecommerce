@@ -7,6 +7,9 @@ import { Toaster } from '@/components/ui/toaster'
 import React from 'react'
 import { ThemeProvider } from '@/components/shared/theme-provider'
 import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/shared/footer'
+import SessionProvider from '@/components/shared/session-provider'
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -31,15 +34,21 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="flex min-h-screen flex-col bg-[#eef3ee]">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster />
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   )
