@@ -30,11 +30,21 @@
 6. UI modernization scope:
 - Premium glassmorphism for `/sign-in` and `/sign-up`.
 - Preserve existing sign-in/sign-up submit logic.
+- Clone the auth UI from reference image while keeping functional behavior unchanged.
+- Reference file for layout cloning:
+  - `public/images/references/auth-phone-reference.png`
+- Important design instruction:
+  - Remove the hand from the reference composition.
+  - Keep phone mockup centered.
+  - Match logo placement and field hierarchy from the reference.
+- Branding:
+  - Use `public/logo.png` as primary brand logo in auth pages.
 
 ## Static Asset Paths
 - Background image: `public/farm-bg.jpg`
-- Alternate background: `public/farm-bg2.jpg`
+- Alternate background: `public/farm-bg2.jpg` (optional; may be absent in some branches)
 - Logo: `public/logo.png`
+- Auth reference: `public/images/references/auth-phone-reference.png`
 - Home hero/category PNG assets:
   - `public/images/home/*.png`
   - `public/images/products/*.png`
