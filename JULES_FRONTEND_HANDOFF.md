@@ -1,0 +1,59 @@
+# Jules Frontend Handoff (Next.js Repo)
+
+## Repo Scope
+- Work only in this repository: `next-pg-shadcn-ecommerce`.
+- Local path: `bkm-zishop-frontend`.
+- Do not perform Spring Boot backend changes from this repo.
+
+## Frontend Contract Targets
+1. Keep auth routes:
+- `/sign-in`
+- `/sign-up`
+
+2. Root redirect:
+- File: `app/(root)/page.tsx`
+- Required behavior: redirect to `/home`.
+
+3. Navbar auth behavior:
+- Unauthenticated: show `Login` and `Become a Seller`.
+- Authenticated: show avatar dropdown with `Profile`, `Settings`, `Sign Out`.
+- Display `session.user.name` (fallback `User`), not email.
+
+4. NextAuth wiring:
+- Use Credentials flow to Java backend API.
+- No Prisma/Vercel Postgres adapter usage.
+- JWT session strategy.
+
+5. Signup payload contract:
+- `{ firstName, lastName, email, password, confirmPassword }`
+
+6. UI modernization scope:
+- Premium glassmorphism for `/sign-in` and `/sign-up`.
+- Preserve existing sign-in/sign-up submit logic.
+
+## Static Asset Paths
+- Background image: `public/farm-bg.jpg`
+- Alternate background: `public/farm-bg2.jpg`
+- Logo: `public/logo.png`
+- Home hero/category PNG assets:
+  - `public/images/home/*.png`
+  - `public/images/products/*.png`
+
+Use these in code as:
+- `src="/farm-bg.jpg"`
+- `src="/images/home/hero-machinery.png"`
+
+## Validation Before PR
+1. `npm install`
+2. `npm run build`
+3. `npm run dev`
+4. Smoke test:
+- `/home`
+- `/sign-in`
+- `/sign-up`
+- `/settings`
+
+## PR Rules
+- Create a dedicated feature branch for each major task.
+- Open PR to `main`.
+- Include screenshots for UI tasks and mention contract changes explicitly.

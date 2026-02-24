@@ -37,3 +37,7 @@ verify.dev.err.log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local scratch files (not part of app runtime)
+/Logo.jpg
+/Gemini_Generated_Image_*.txt
