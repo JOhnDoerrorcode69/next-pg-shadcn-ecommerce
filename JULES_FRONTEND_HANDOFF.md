@@ -29,6 +29,9 @@
 
 6. UI modernization scope:
 - Premium glassmorphism for `/sign-in` and `/sign-up`.
+- Scope restriction: background swap is auth-only.
+  - Apply auth background image only on `/sign-in` and `/sign-up`.
+  - Do not apply auth background to `/home`, listing pages, category pages, or any non-auth route.
 - Preserve existing sign-in/sign-up submit logic.
 - Clone the auth UI from reference image while keeping functional behavior unchanged.
 - Reference file for layout cloning:
@@ -41,7 +44,7 @@
   - Use `public/logo.png` as primary brand logo in auth pages.
 
 ## Static Asset Paths
-- Background image: `public/farm-bg.jpg`
+- Background image (auth routes only): `public/farm-bg.jpg`
 - Alternate background: `public/farm-bg2.jpg` (optional; may be absent in some branches)
 - Logo: `public/logo.png`
 - Auth reference: `public/images/references/auth-phone-reference.png`
