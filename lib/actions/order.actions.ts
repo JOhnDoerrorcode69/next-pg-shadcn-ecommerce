@@ -18,13 +18,24 @@ import { sendPurchaseReceipt } from '@/email'
 
 // GET
 export async function getOrderById(orderId: string) {
-  return await db.query.orders.findFirst({
+  const session = await auth()
+  if (!session) throw new Error('User is not authenticated')
+
+  const order = await db.query.orders.findFirst({
     where: eq(orders.id, orderId),
     with: {
       orderItems: true,
       user: { columns: { name: true, email: true } },
     },
   })
+
+  if (!order) return null
+
+  if (order.userId !== session.user.id && session.user.role !== 'admin') {
+    throw new Error('User is not authorized')
+  }
+
+  return order
 }
 
 export async function getMyOrders({
@@ -55,6 +66,10 @@ export async function getMyOrders({
 }
 
 export async function getOrderSummary() {
+  const session = await auth()
+  if (session?.user?.role !== 'admin')
+    throw new Error('Admin permission required')
+
   const ordersCount = await db.select({ count: count() }).from(orders)
   const productsCount = await db.select({ count: count() }).from(products)
   const usersCount = await db.select({ count: count() }).from(users)
@@ -94,6 +109,10 @@ export async function getAllOrders({
   limit?: number
   page: number
 }) {
+  const session = await auth()
+  if (session?.user?.role !== 'admin')
+    throw new Error('Admin permission required')
+
   const data = await db.query.orders.findMany({
     orderBy: [desc(products.createdAt)],
     limit,
@@ -161,6 +180,10 @@ export const createOrder = async () => {
 // DELETE
 export async function deleteOrder(id: string) {
   try {
+    const session = await auth()
+    if (session?.user?.role !== 'admin')
+      throw new Error('Admin permission required')
+
     await db.delete(orders).where(eq(orders.id, id))
     revalidatePath('/admin/orders')
     return {
@@ -175,10 +198,16 @@ export async function deleteOrder(id: string) {
 // UPDATE
 export async function createPayPalOrder(orderId: string) {
   try {
+    const session = await auth()
+    if (!session) throw new Error('User is not authenticated')
+
     const order = await db.query.orders.findFirst({
       where: eq(orders.id, orderId),
     })
     if (order) {
+      if (order.userId !== session.user.id)
+        throw new Error('User is not authorized')
+
       const paypalOrder = await paypal.createOrder(Number(order.totalPrice))
       await db
         .update(orders)
@@ -209,10 +238,16 @@ export async function approvePayPalOrder(
   data: { orderID: string }
 ) {
   try {
+    const session = await auth()
+    if (!session) throw new Error('User is not authenticated')
+
     const order = await db.query.orders.findFirst({
       where: eq(orders.id, orderId),
     })
     if (!order) throw new Error('Order not found')
+
+    if (order.userId !== session.user.id)
+      throw new Error('User is not authorized')
 
     const captureData = await paypal.capturePayment(data.orderID)
     if (
@@ -285,6 +320,10 @@ export const updateOrderToPaid = async ({
 
 export async function updateOrderToPaidByCOD(orderId: string) {
   try {
+    const session = await auth()
+    if (session?.user?.role !== 'admin')
+      throw new Error('Admin permission required')
+
     await updateOrderToPaid({ orderId })
     revalidatePath(`/order/${orderId}`)
     return { success: true, message: 'Order paid successfully' }
@@ -295,6 +334,10 @@ export async function updateOrderToPaidByCOD(orderId: string) {
 
 export async function deliverOrder(orderId: string) {
   try {
+    const session = await auth()
+    if (session?.user?.role !== 'admin')
+      throw new Error('Admin permission required')
+
     const order = await db.query.orders.findFirst({
       where: eq(orders.id, orderId),
     })
