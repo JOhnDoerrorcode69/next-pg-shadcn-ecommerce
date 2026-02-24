@@ -1,5 +1,5 @@
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
-import { compareSync } from 'bcrypt-ts-edge'
+import { compare } from 'bcrypt-ts-edge'
 import { eq } from 'drizzle-orm'
 import type { NextAuthConfig } from 'next-auth'
 import NextAuth from 'next-auth'
@@ -38,7 +38,7 @@ export const config = {
           where: eq(users.email, credentials.email as string),
         })
         if (user && user.password) {
-          const isMatch = compareSync(
+          const isMatch = await compare(
             credentials.password as string,
             user.password
           )
