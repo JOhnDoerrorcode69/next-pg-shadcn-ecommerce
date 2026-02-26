@@ -34,6 +34,7 @@ async function fetchProducts(): Promise<Product[]> {
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([])
+  // Fix type assertion for Autoplay plugin
   const [plugin] = useState(() => Autoplay({ delay: 4000, stopOnInteraction: true }))
 
   useEffect(() => {

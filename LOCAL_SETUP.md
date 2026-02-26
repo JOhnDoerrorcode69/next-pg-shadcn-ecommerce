@@ -1,8 +1,15 @@
-# Local Setup Instructions - Consumer UI Redesign
+# Local Setup Instructions for Consumer UI Redesign
 
-## 1. Fetch & Checkout Branch
+Follow these steps to set up the redesigned Consumer UI (Liquid Glass Theme) on your local machine.
 
-Open your terminal in the `bkm-zishop-frontend` directory and run:
+## Prerequisites
+- Node.js (v18 or higher recommended)
+- `pnpm` (Package Manager)
+- Local Spring Boot Backend running on port 8080 (optional but recommended for full testing)
+
+## 1. Fetch and Checkout the Branch
+
+Open your terminal in the project root and run:
 
 ```bash
 git fetch origin
@@ -11,32 +18,36 @@ git checkout feature/consumer-ui-redesign
 
 ## 2. Install Dependencies
 
-Ensure you have all the necessary packages installed, including the new UI components:
+Install the new dependencies required for the redesign (including `embla-carousel-autoplay`):
 
 ```bash
 pnpm install
 ```
 
-## 3. Run Development Server
+## 3. Start the Development Server
 
-Start the Next.js frontend:
+Run the Next.js development server:
 
 ```bash
 pnpm dev
 ```
 
-The application will be available at `http://localhost:3000`.
+The application will be available at [http://localhost:3000](http://localhost:3000).
 
-## 4. Backend Integration (Optional)
+## 4. Backend Connection (Optional)
 
-To test the live data connection:
+The frontend is configured to attempt to fetch products from your local Spring Boot backend at `http://localhost:8080/api/products`.
 
-1. Ensure your Spring Boot backend is running on port `8080`.
-2. The frontend will automatically try to fetch products from `http://localhost:8080/api/products`.
-3. If the backend is not running, the frontend will seamlessly fallback to the mock data defined in `lib/fallback-data.ts`.
+- **If your Spring Boot server is running:** The frontend will display live data from your backend.
+- **If your Spring Boot server is NOT running:** The frontend will automatically fallback to the mock data (demo products and images), so the UI will still be fully functional and populated.
 
-## 5. Verification Steps
+## 5. Verification
 
-1. **Home Page**: Navigate to `/`. You should see the "Lush Farm Green" background, the 5-image hero slider, the 3 pillars section, and featured products.
-2. **All Products**: Click on "All Products" or any category pillar. Verify the glassmorphic grid and pill filters.
-3. **Navbar/Footer**: Check the fixed glassmorphic navbar and footer.
+1.  **Home Page:** Navigate to `/` to see the new "Lush Farm Green" background, the Hero Carousel, the "3 Pillars" section, and the Featured Products grid.
+2.  **All Products:** Navigate to `/all` (or click "View All") to see the full product catalog with pill-shaped category filters.
+3.  **Responsiveness:** Resize your browser window to verify the mobile layout and navigation menu.
+
+## Troubleshooting
+
+-   **Images not loading?** Ensure your internet connection is active, as the project uses images from Unsplash.
+-   **Build errors?** Try running `pnpm run build` to check for any TypeScript or linting issues locally.
