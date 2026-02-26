@@ -8,7 +8,29 @@ import { InferSelectModel } from 'drizzle-orm'
 import { z } from 'zod'
 
 // PRODUCTS
-export type Product = InferSelectModel<typeof products>
+// Updated to match Spring Boot backend contract
+export interface Product {
+  id: string
+  name: string
+  slug: string
+  category: string
+  images: string[]
+  brand: string
+  description: string
+  stock: number
+  price: string
+  rating: string
+  numReviews: number
+  isFeatured: boolean
+  banner: string | null
+  createdAt: Date
+  // New fields from Spring Boot contract
+  mrp?: string
+  discount?: string
+  isFlashDeal?: boolean
+  imageUrl?: string // Spring Boot often sends a single imageUrl, we'll map it to images[0] if needed
+}
+
 export type Review = InferSelectModel<typeof reviews> & {
   user?: { name: string }
 }
