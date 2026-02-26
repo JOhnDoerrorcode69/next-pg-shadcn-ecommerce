@@ -23,7 +23,8 @@ export const signInDefaultValues = {
 }
 
 export const signUpDefaultValues = {
-  name: '',
+  firstName: '',
+  lastName: '',
   email: '',
   password: '',
   confirmPassword: '',
