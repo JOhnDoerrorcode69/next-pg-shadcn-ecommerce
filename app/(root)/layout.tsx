@@ -1,16 +1,17 @@
 import React from 'react'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/shared/footer'
 
 export default function RootLayout({
   children,
-  modal,
-}: {
+}: Readonly<{
   children: React.ReactNode
-  modal: React.ReactNode
-}) {
+}>) {
   return (
-    <div className="flex min-h-full flex-col">
-      <main className="wrapper flex-1">{children}</main>
-      {modal}
+    <div className="flex min-h-screen flex-col bg-[#eef3ee]">
+      <Navbar />
+      <main className="flex-1">{children}</main>
+      <Footer />
     </div>
   )
 }
