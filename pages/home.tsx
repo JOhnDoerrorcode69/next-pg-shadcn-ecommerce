@@ -26,7 +26,7 @@ const HERO_SLIDES: HeroSlide[] = [
     id: "machinery",
     title: "MODERN MACHINERIES",
     subtitle: "Up to 20% Off on Tractors",
-    image: "/images/home/hero-machinery.jpg",
+    image: "/images/home/hero-machinery.png",
     cta: "SHOP NOW",
     tab: "machinery",
   },
@@ -34,7 +34,7 @@ const HERO_SLIDES: HeroSlide[] = [
     id: "mro",
     title: "MRO ESSENTIALS",
     subtitle: "Tools for Every Need",
-    image: "/images/home/hero-mro.jpg",
+    image: "/images/home/hero-mro.png",
     cta: "SHOP NOW",
     tab: "mro",
   },
@@ -42,7 +42,7 @@ const HERO_SLIDES: HeroSlide[] = [
     id: "seeds",
     title: "SEEDS & FERTILIZERS",
     subtitle: "Better Yield for Every Season",
-    image: "/images/home/hero-seeds.jpg",
+    image: "/images/home/hero-seeds.png",
     cta: "SHOP NOW",
     tab: "seeds",
   },
@@ -50,7 +50,7 @@ const HERO_SLIDES: HeroSlide[] = [
     id: "deals",
     title: "TODAY'S DEALS",
     subtitle: "Limited Time Discounts",
-    image: "/images/home/hero-deals.jpg",
+    image: "/images/home/hero-deals.png",
     cta: "VIEW DEALS",
     tab: "all",
   },
@@ -58,16 +58,16 @@ const HERO_SLIDES: HeroSlide[] = [
     id: "seller",
     title: "BECOME A SELLER",
     subtitle: "Grow Your Agriculture Business",
-    image: "/images/home/hero-seller.jpg",
+    image: "/images/home/hero-seller.png",
     cta: "JOIN NOW",
     tab: "all",
   },
 ];
 
 const CATEGORY_TABS: Array<{ key: StoreTab; label: string; icon: string }> = [
-  { key: "machinery", label: "AGRI MACHINERIES", icon: "/images/home/icon-machinery.jpg" },
-  { key: "mro", label: "MRO & TOOLS", icon: "/images/home/icon-mro.jpg" },
-  { key: "seeds", label: "SEEDS & FERTILIZERS", icon: "/images/home/icon-seeds.jpg" },
+  { key: "machinery", label: "AGRI MACHINERIES", icon: "/images/home/icon-machinery.png" },
+  { key: "mro", label: "MRO & TOOLS", icon: "/images/home/icon-mro.png" },
+  { key: "seeds", label: "SEEDS & FERTILIZERS", icon: "/images/home/icon-seeds.png" },
 ];
 
 const Home: NextPage<HomeProps> = ({ products }) => {
@@ -104,7 +104,7 @@ const Home: NextPage<HomeProps> = ({ products }) => {
         name: "Agri Drone Survey Pro",
         description: "Precision mapping drone for crop monitoring and spray planning.",
         price: 120000,
-        imageUrl: "/images/home/hero-machinery.jpg",
+        imageUrl: "/images/home/hero-machinery.png",
         category: "Machinery",
         brand: "AgriTech",
         stock: 10,
@@ -117,7 +117,7 @@ const Home: NextPage<HomeProps> = ({ products }) => {
         name: "Smart Soil Moisture Sensor",
         description: "IoT soil monitor with mobile alerts for irrigation decisions.",
         price: 1800,
-        imageUrl: "/images/home/hero-seeds.jpg",
+        imageUrl: "/images/home/hero-seeds.png",
         category: "MRO",
         brand: "FarmSense",
         stock: 100,
@@ -151,13 +151,20 @@ const Home: NextPage<HomeProps> = ({ products }) => {
       <div className="bg-[#f5f8f1] pb-14">
         <div className="mx-auto max-w-[1280px] px-3 pt-3 md:px-5">
           <section className="relative overflow-hidden rounded-xl border border-[#dbe3d3]">
-            <img src={activeSlide.image} alt={activeSlide.title} className="h-[370px] w-full object-cover md:h-[520px]" />
+            <img
+              src={activeSlide.image}
+              alt={activeSlide.title}
+              className="h-[370px] w-full object-cover md:h-[520px]"
+              onError={(event) => {
+                event.currentTarget.src = "/images/home/hero-machinery.png";
+              }}
+            />
             <div className="absolute inset-0 bg-gradient-to-r from-black/45 to-black/20" />
 
             <div className="absolute left-8 top-1/4 z-10 text-white md:left-12">
               <h1 className="text-5xl font-black leading-none md:text-8xl">{activeSlide.title}</h1>
               <p className="mt-4 text-3xl font-semibold text-[#f6ad3a] md:text-6xl">{activeSlide.subtitle}</p>
-              <Link href={slideHref}>
+              <Link legacyBehavior href={slideHref}>
                 <a className="mt-6 inline-block bg-white px-8 py-3 text-2xl font-black text-[#168a46] md:px-10 md:py-4 md:text-4xl">
                   {activeSlide.cta}
                 </a>
@@ -212,7 +219,7 @@ const Home: NextPage<HomeProps> = ({ products }) => {
                   Handpicked for your farm&apos;s success
                 </p>
               </div>
-              <Link href={viewAllHref}>
+              <Link legacyBehavior href={viewAllHref}>
                 <a className="border-2 border-[#2a9a59] px-6 py-3 text-2xl font-black text-[#2a9a59] transition-colors hover:bg-[#2a9a59] hover:text-white md:text-3xl">
                   VIEW ALL {activeTab === "machinery" ? "AGRI MACHINERIES" : activeTab === "mro" ? "MRO & TOOLS" : "SEEDS & FERTILIZERS"}
                 </a>
@@ -274,7 +281,7 @@ const Home: NextPage<HomeProps> = ({ products }) => {
                 <h3 className="border-l-4 border-[#2aa45e] pl-3 text-5xl font-black text-[#102238] md:text-6xl">
                   Trending in Farming Tech
                 </h3>
-                <Link href="/best-sellers">
+                <Link legacyBehavior href="/best-sellers">
                   <a className="text-3xl font-black text-[#2a9a59]">See More</a>
                 </Link>
               </div>

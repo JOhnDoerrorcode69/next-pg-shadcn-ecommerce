@@ -1,158 +1,205 @@
-import Link from "next/link";
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import { FaBars, FaChevronDown, FaMapMarkerAlt, FaSearch, FaShoppingCart } from "react-icons/fa";
-import { MENU_CONFIG } from "../utils/storefront";
+'use client'
+
+import Link from 'next/link'
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Search, ShoppingCart, User, Menu, X } from 'lucide-react'
+import { useSession, signOut } from 'next-auth/react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { APP_NAME } from '@/lib/constants'
 
 const Navbar: React.FC = () => {
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchCategory, setSearchCategory] = useState("all");
-  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState('')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const router = useRouter()
+  const { data: session } = useSession()
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    router.push({
-      pathname: "/all",
-      query: {
-        ...(searchCategory !== "all" ? { category: searchCategory } : {}),
-        ...(searchTerm.trim() ? { q: searchTerm.trim() } : {}),
-      },
-    });
-  };
+    event.preventDefault()
+    if (searchTerm.trim()) {
+      router.push(`/all?q=${searchTerm.trim()}`)
+    }
+  }
 
   return (
-    <header className="sticky top-0 z-40 w-full shadow-[0_1px_0_rgba(0,0,0,0.09)]">
-      <div className="border-b border-[#303743] bg-[#222b35] px-3 py-1 text-xs text-white/85 md:px-6">
-        This app is in Design Mode which is best for rapid designs & websites.
+    <nav className="fixed top-0 z-50 w-full px-4 py-4 sm:px-6 lg:px-8">
+      <div className="glass-morphic mx-auto flex h-16 max-w-[1400px] items-center justify-between rounded-full px-4 sm:px-8">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <span className="text-xl font-bold tracking-tight text-white sm:text-2xl italic">
+            {APP_NAME}
+          </span>
+        </Link>
+
+        {/* Search Bar - Hidden on mobile, visible on lg */}
+        <form
+          onSubmit={handleSearch}
+          className="hidden max-w-md flex-1 px-8 lg:block"
+        >
+          <div className="relative">
+            <Input
+              type="text"
+              placeholder="Search for products..."
+              className="h-10 w-full rounded-full border-none bg-white/10 pl-10 text-white placeholder:text-white/60 focus-visible:ring-1 focus-visible:ring-white/30"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Search className="absolute left-3 top-2.5 h-5 w-5 text-white/60" />
+          </div>
+        </form>
+
+        {/* Desktop Navigation */}
+        <div className="hidden items-center gap-4 md:flex">
+          {!session && (
+            <Link href="/become-seller">
+              <Button
+                variant="ghost"
+                className="rounded-full text-white hover:bg-white/10 hover:text-white"
+              >
+                Become a Seller
+              </Button>
+            </Link>
+          )}
+
+          <Link href="/cart">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative rounded-full text-white hover:bg-white/10 hover:text-white"
+            >
+              <ShoppingCart className="h-5 w-5" />
+            </Button>
+          </Link>
+
+          {session ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="gap-2 rounded-full text-white hover:bg-white/10 hover:text-white"
+                >
+                  <User className="h-5 w-5" />
+                  <span className="hidden lg:inline-block">
+                    {session.user?.name || 'User'}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-48 rounded-xl border-white/20 bg-black/80 text-white backdrop-blur-xl"
+              >
+                <DropdownMenuItem className="focus:bg-white/10 focus:text-white">
+                  <Link href="/profile" className="w-full">
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="focus:bg-white/10 focus:text-white">
+                  <Link href="/settings" className="w-full">
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="focus:bg-white/10 focus:text-white"
+                  onSelect={(e) => {
+                    e.preventDefault()
+                    signOut({ callbackUrl: '/' })
+                  }}
+                >
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link href="/sign-in">
+              <Button className="rounded-full bg-white text-[#1b431e] hover:bg-gray-100 hover:-translate-y-1 transition-transform">
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          className="rounded-full p-2 text-white hover:bg-white/10 md:hidden"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
+        </button>
       </div>
 
-      <nav className="border-b border-[#42bf69] bg-[#20aa50] text-white">
-        <div className="mx-auto flex max-w-[1280px] items-center gap-2 px-3 py-2 md:gap-4 md:px-5">
-          <Link href="/home">
-            <a className="min-w-[208px]">
-              <div className="leading-tight">
-                <p className="text-[20px] font-black italic tracking-tight">Bharat Krishi Mitra</p>
-                <p className="text-xs text-white/85">Explore Plus</p>
-              </div>
-            </a>
-          </Link>
-
-          <div className="hidden items-center gap-2 text-white/95 lg:flex">
-            <FaMapMarkerAlt className="text-base" />
-            <div className="leading-tight">
-              <p className="text-xs text-white/85">Deliver to</p>
-              <p className="text-[15px] font-semibold">Select location</p>
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="glass-morphic mt-2 rounded-2xl p-4 md:hidden">
+          <form onSubmit={handleSearch} className="mb-4">
+            <div className="relative">
+              <Input
+                type="text"
+                placeholder="Search..."
+                className="h-10 w-full rounded-full border-none bg-white/10 pl-10 text-white placeholder:text-white/60"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <Search className="absolute left-3 top-2.5 h-5 w-5 text-white/60" />
             </div>
-          </div>
-
-          <form
-            onSubmit={handleSearch}
-            className="ml-auto flex h-10 w-full max-w-[430px] items-center overflow-hidden rounded-md border border-[#0d8f3a] bg-white text-[#1f2937]"
-          >
-            <select
-              value={searchCategory}
-              onChange={(event) => setSearchCategory(event.target.value)}
-              className="h-full border-r border-slate-200 bg-white px-3 text-sm outline-none"
-            >
-              <option value="all">All</option>
-              <option value="machinery">Machinery</option>
-              <option value="mro">MRO</option>
-              <option value="seeds">Seeds</option>
-            </select>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
-              placeholder="Search for products,"
-              className="h-full w-full px-3 text-sm outline-none"
-            />
-            <button type="submit" className="inline-flex h-full w-11 items-center justify-center bg-[#f5a623] text-white">
-              <FaSearch />
-            </button>
           </form>
-
-          <div className="hidden items-center gap-6 text-base font-semibold md:flex">
-            <Link href="/login">
-              <a className="transition-colors hover:text-[#f8ffcb]">Login</a>
+          <div className="flex flex-col gap-2">
+            {!session && (
+              <Link
+                href="/become-seller"
+                className="rounded-lg px-4 py-2 text-white hover:bg-white/10"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Become a Seller
+              </Link>
+            )}
+            <Link
+              href="/cart"
+              className="rounded-lg px-4 py-2 text-white hover:bg-white/10"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Cart
             </Link>
-            <Link href="/become-seller">
-              <a className="transition-colors hover:text-[#f8ffcb]">Become a Seller</a>
-            </Link>
-            <Link href="/cart">
-              <a className="inline-flex items-center gap-2 transition-colors hover:text-[#f8ffcb]">
-                <FaShoppingCart />
-                Cart
-              </a>
-            </Link>
+            {session ? (
+              <>
+                <Link
+                  href="/profile"
+                  className="rounded-lg px-4 py-2 text-white hover:bg-white/10"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className="text-left rounded-lg px-4 py-2 text-white hover:bg-white/10"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/sign-in"
+                className="rounded-lg px-4 py-2 text-white hover:bg-white/10"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
-      </nav>
+      )}
+    </nav>
+  )
+}
 
-      <nav className="border-b border-[#2d3440] bg-[#1f2b3d] text-white">
-        <div className="mx-auto flex max-w-[1280px] items-center gap-6 px-3 py-3 text-[17px] font-semibold md:px-5">
-          <Link href="/all">
-            <a className="inline-flex items-center gap-2 whitespace-nowrap transition-colors hover:text-[#9effcb]">
-              <FaBars className="text-sm" />
-              All
-            </a>
-          </Link>
-
-          {MENU_CONFIG.map((menu) => (
-            <div
-              key={menu.label}
-              className="relative"
-              onMouseEnter={() => setOpenMenu(menu.label)}
-              onMouseLeave={() => setOpenMenu((current) => (current === menu.label ? null : current))}
-            >
-              <button
-                type="button"
-                onClick={() => setOpenMenu((current) => (current === menu.label ? null : menu.label))}
-                className="inline-flex items-center gap-1 whitespace-nowrap transition-colors hover:text-[#9effcb]"
-              >
-                {menu.label}
-                <FaChevronDown className="text-xs" />
-              </button>
-
-              <div className="absolute left-0 top-full z-50 pt-2">
-                <div
-                  className={`w-[290px] rounded-xl border border-[#d7e3cc] bg-white p-4 text-[#1f2937] shadow-[0_14px_30px_rgba(0,0,0,0.18)] transition-all duration-200 ${
-                    openMenu === menu.label ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
-                  }`}
-                >
-                  <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Top Categories</p>
-                  <div className="mt-2 space-y-1 text-base font-semibold">
-                    {menu.subcategories.map((sub) => (
-                      <Link key={sub.slug} href={{ pathname: menu.href, query: { sub: sub.slug } }}>
-                        <a className="block rounded-md px-2 py-1.5 transition-colors hover:bg-[#edf7ef] hover:text-[#137b40]">
-                          {sub.label}
-                        </a>
-                      </Link>
-                    ))}
-                  </div>
-                  <Link href={menu.href}>
-                    <a className="mt-3 block rounded-lg bg-[#ecf7ef] px-3 py-2 text-sm font-bold text-[#148d47] transition-colors hover:bg-[#ddf2e3]">
-                      View All {menu.label}
-                    </a>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          <Link href="/best-sellers">
-            <a className="whitespace-nowrap transition-colors hover:text-[#9effcb]">Best Sellers</a>
-          </Link>
-          <Link href="/todays-deals">
-            <a className="whitespace-nowrap transition-colors hover:text-[#9effcb]">Today&apos;s Deals</a>
-          </Link>
-          <Link href="/customer-service">
-            <a className="whitespace-nowrap transition-colors hover:text-[#9effcb]">Customer Service</a>
-          </Link>
-        </div>
-      </nav>
-    </header>
-  );
-};
-
-export default Navbar;
+export default Navbar

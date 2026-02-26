@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import type { ReactElement } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { FaLeaf, FaSeedling, FaTools, FaTractor } from "react-icons/fa";
 import { Product } from "../../types/Product";
@@ -7,11 +8,11 @@ import {
   StoreTab,
   filterBySubcategory,
   filterProductsByTab,
-  getBadgeText,
   getFallbackProductImage,
   getProductImageUrl,
   MENU_CONFIG,
 } from "../../utils/storefront";
+import ModernProductCard from "./ModernProductCard";
 
 interface StorefrontPageProps {
   products: Product[];
@@ -25,18 +26,11 @@ interface StorefrontPageProps {
   compactCards?: boolean;
 }
 
-const tabIcons: Record<StoreTab, JSX.Element> = {
+const tabIcons: Record<StoreTab, ReactElement> = {
   all: <FaLeaf />,
   machinery: <FaTractor />,
   mro: <FaTools />,
   seeds: <FaSeedling />,
-};
-
-const tabText: Record<StoreTab, string> = {
-  all: "All Categories",
-  machinery: "Agri Machineries",
-  mro: "MRO & Tools",
-  seeds: "Seeds & Fertilizers",
 };
 
 const tabRoute: Record<StoreTab, string> = {
@@ -94,7 +88,7 @@ const StorefrontPage = ({
       <div className="mx-auto max-w-[1280px] px-3 pb-10 pt-3 md:px-5">
         {showHero && (
           <section className="relative overflow-hidden rounded-xl border border-[#d9e2d2]">
-            <img src="/images/products/machinery-placeholder.jpg" alt="Agriculture hero" className="h-[310px] w-full object-cover" />
+            <img src="/images/products/machinery-placeholder.png" alt="Agriculture hero" className="h-[310px] w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/35 to-black/45" />
             <div className="absolute inset-x-0 top-[26%] px-4 text-center text-white">
               <p className="text-4xl font-black md:text-6xl">{heroTitle || "MODERN MACHINERIES"}</p>
@@ -110,7 +104,7 @@ const StorefrontPage = ({
             {MENU_CONFIG.map((item) => {
               const isSelected = activeTab === item.tab;
               return (
-                <Link key={item.tab} href={tabRoute[item.tab]}>
+                <Link legacyBehavior key={item.tab} href={tabRoute[item.tab]}>
                   <a
                     onMouseEnter={() => setActiveTab(item.tab)}
                     className={`rounded-2xl border bg-white px-4 py-4 transition-all duration-200 ${
@@ -143,47 +137,24 @@ const StorefrontPage = ({
               <p className="text-4xl font-black text-[#091f38] md:text-5xl">{headerTitle}</p>
               <p className="mt-1 text-xl text-[#5b6470] md:text-2xl">{headerSubtitle}</p>
             </div>
-            <Link href={tabRoute[activeTab]}>
+            <Link legacyBehavior href={tabRoute[activeTab]}>
               <a className="text-lg font-bold text-[#167f43] underline underline-offset-8 md:text-2xl">View All Products</a>
             </Link>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {displayedProducts.map((product) => (
-              <article
+              <div
                 key={product.id}
-                className="overflow-hidden rounded-2xl border border-[#d7e2d0] bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_18px_rgba(0,0,0,0.13)]"
+                className="transition-all duration-200"
               >
-                <div className="relative h-44 bg-[#e6ecdf]">
-                  <img
-                    src={getProductImageUrl(product)}
-                    alt={product.name}
-                    className="h-full w-full object-cover"
-                    onError={(event) => {
-                      event.currentTarget.src = getFallbackProductImage(product.category);
-                    }}
-                  />
-                  <span className="absolute right-2 top-2 rounded-full bg-[#1c8f4c] px-2 py-0.5 text-xs font-bold text-white">
-                    {getBadgeText(product)}
-                  </span>
-                </div>
-                <div className="p-3">
-                  <p className="line-clamp-2 text-xl font-bold text-[#1b2430]">{product.name}</p>
-                  <p className="mt-2 line-clamp-2 text-sm text-[#636e7c]">
-                    {product.description || "Reliable agriculture product for professional farm use."}
-                  </p>
-                  <div className="mt-3 flex items-center justify-between">
-                    <div>
-                      <p className="text-3xl font-black text-[#087443]">₹{Math.round(product.price).toLocaleString("en-IN")}</p>
-                    </div>
-                    <Link href={{ pathname: tabRoute[activeTab], query: { q: product.name } }}>
-                      <a className="rounded-xl bg-[#0b7b42] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#076a37]">
-                        View Details
-                      </a>
-                    </Link>
-                  </div>
-                </div>
-              </article>
+                <ModernProductCard
+                  product={product}
+                  imageUrl={getProductImageUrl(product)}
+                  fallbackImageUrl={getFallbackProductImage(product.category)}
+                  detailsHref={`${tabRoute[activeTab]}?q=${encodeURIComponent(product.name || "")}`}
+                />
+              </div>
             ))}
           </div>
 
