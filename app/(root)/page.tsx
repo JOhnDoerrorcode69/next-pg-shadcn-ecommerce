@@ -34,6 +34,7 @@ async function fetchProducts(): Promise<Product[]> {
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([])
+  // Fix type assertion for Autoplay plugin
   const [plugin] = useState(() => Autoplay({ delay: 4000, stopOnInteraction: true }))
 
   useEffect(() => {
@@ -91,7 +92,7 @@ export default function Home() {
           {
             title: 'Agri Machinery',
             desc: 'High-performance tractors & equipment',
-            img: 'https://images.unsplash.com/photo-1592982537447-6f2a6a0c7c18?q=80&w=2070&auto=format&fit=crop',
+            img: 'https://images.unsplash.com/photo-1595246140625-573b715d11dc?q=80&w=2000&auto=format&fit=crop', // Replaced faulty URL
             link: '/all?category=Machinery',
           },
           {
