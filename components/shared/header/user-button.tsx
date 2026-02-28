@@ -15,9 +15,14 @@ export default async function UserButton() {
   const session = await auth()
   if (!session)
     return (
-      <Link href="/api/auth/signin">
-        <Button>Sign In</Button>
-      </Link>
+      <div className="flex gap-2 items-center">
+        <Link href="/sign-in">
+          <Button variant="ghost">Login</Button>
+        </Link>
+        <Link href="/sign-in?callbackUrl=/seller/onboarding">
+          <Button>Become a Seller</Button>
+        </Link>
+      </div>
     )
   return (
     <div className="flex gap-2 items-center">
@@ -63,6 +68,12 @@ export default async function UserButton() {
               </Link>
             </DropdownMenuItem>
           )}
+
+          <DropdownMenuItem>
+            <Link className="w-full" href="/seller/onboarding">
+              Become a Seller
+            </Link>
+          </DropdownMenuItem>
 
           <DropdownMenuItem className="p-0 mb-1">
             <form action={SignOut} className="w-full">
