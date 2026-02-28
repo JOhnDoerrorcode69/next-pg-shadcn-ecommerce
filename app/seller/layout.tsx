@@ -1,11 +1,17 @@
+'use client'
+
 import React from 'react'
 import Sidebar from '@/components/seller/Sidebar'
+import { usePathname } from 'next/navigation'
 
 export default function SellerLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const pathname = usePathname()
+  const isOnboarding = pathname?.startsWith('/seller/onboarding')
+
   return (
     <div className="flex min-h-screen w-full relative">
       {/* Full Screen Background Gradient - Lush Farm Green */}
@@ -17,9 +23,9 @@ export default function SellerLayout({
       />
 
       <div className="relative z-10 flex w-full">
-        <Sidebar />
-        <main className="flex-1 p-4 md:p-8">
-            <div className="mx-auto max-w-7xl">
+        {!isOnboarding && <Sidebar />}
+        <main className={`flex-1 ${isOnboarding ? '' : 'p-4 md:p-8'}`}>
+            <div className={isOnboarding ? '' : 'mx-auto max-w-7xl'}>
                 {children}
             </div>
         </main>

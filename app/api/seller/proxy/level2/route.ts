@@ -13,9 +13,9 @@ export async function POST(req: Request) {
   try {
     const payload = await req.json()
 
-    console.log('Proxying to backend:', `${API_BASE}/api/seller/onboarding/level1`)
+    console.log('Proxying to backend:', `${API_BASE}/api/seller/onboarding/level2/submit`)
 
-    const response = await fetch(`${API_BASE}/api/seller/onboarding/level1`, {
+    const response = await fetch(`${API_BASE}/api/seller/onboarding/level2/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

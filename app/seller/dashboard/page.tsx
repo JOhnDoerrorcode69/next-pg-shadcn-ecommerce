@@ -67,7 +67,7 @@ const recentOrders = [
 type OnboardingStatus = {
   level1Completed: boolean
   level2Status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'NOT_SUBMITTED'
-  bankVerificationStatus: 'PENDING' | 'VERIFIED' | 'FAILED' | 'NOT_SUBMITTED'
+  bankStatus: 'PENDING' | 'VERIFIED' | 'FAILED' | 'NOT_SUBMITTED'
   kycStatus: 'PENDING' | 'APPROVED' | 'REJECTED' | 'NOT_SUBMITTED'
   canCreateDraft: boolean
   canPublishLive: boolean
@@ -91,7 +91,7 @@ export default function SellerDashboard() {
         setStatus({
           level1Completed: false,
           level2Status: 'NOT_SUBMITTED',
-          bankVerificationStatus: 'NOT_SUBMITTED',
+          bankStatus: 'NOT_SUBMITTED',
           kycStatus: 'NOT_SUBMITTED',
           canCreateDraft: false,
           canPublishLive: false,

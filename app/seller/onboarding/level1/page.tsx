@@ -49,15 +49,9 @@ export default function Level1Page() {
     const formData = new FormData(e.currentTarget)
     const payload = {
       mobile: mobile,
-      email: formData.get('email'),
       legalBusinessName: formData.get('legalBusinessName'),
       storeName: formData.get('storeName'),
       pickupAddress: formData.get('pickupAddress'),
-      panNumber: formData.get('panNumber'),
-      gstin: formData.get('gstin'),
-      bankAccountNumber: formData.get('bankAccountNumber'),
-      ifsc: formData.get('ifsc'),
-      accountHolderName: formData.get('accountHolderName'),
     }
 
     try {
@@ -72,34 +66,32 @@ export default function Level1Page() {
       })
 
       if (!response.ok) {
-        // Fallback for when backend is not ready
-        console.warn('Backend returned error, falling back to mock success')
-        throw new Error('Backend error')
+        throw new Error('Failed to submit Level 1 details')
       }
 
       router.push('/seller/onboarding/level2')
     } catch (err: any) {
-      console.warn('Fallback: Redirecting to level 2 anyway')
-      router.push('/seller/onboarding/level2')
+      console.error(err)
+      setError(err.message || 'An error occurred during submission. Please try again.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-8">
+    <div className="max-w-3xl mx-auto p-6 md:p-10 space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Seller Onboarding: Step 1</h1>
-        <p className="text-gray-500 mt-2">Basic Business and Bank Details</p>
+        <h1 className="h1-bold">Seller Onboarding: Step 1</h1>
+        <p className="text-emerald-100/80 mt-2 font-medium">Basic Business Details</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-8">
         {/* OTP Flow */}
-        <div className="p-4 border rounded-lg bg-gray-50 space-y-4">
-          <h2 className="text-lg font-semibold">Mobile Verification</h2>
-          <div className="flex gap-2 items-end">
-            <div className="flex-1 space-y-2">
-              <Label htmlFor="mobile">Mobile Number</Label>
+        <div className="p-6 border border-white/20 rounded-xl bg-black/20 backdrop-blur-md space-y-5">
+          <h2 className="h3-bold border-b border-white/10 pb-3">Mobile Verification</h2>
+          <div className="flex flex-col md:flex-row gap-4 items-end">
+            <div className="flex-1 w-full space-y-2">
+              <Label htmlFor="mobile" className="text-emerald-50">Mobile Number</Label>
               <Input
                 id="mobile"
                 value={mobile}
@@ -107,88 +99,66 @@ export default function Level1Page() {
                 placeholder="10-digit mobile number"
                 disabled={otpVerified}
                 required
+                className="bg-white/10 border-white/20 text-white placeholder:text-emerald-100/50 focus-visible:ring-emerald-500"
               />
             </div>
             {!otpVerified && (
-              <Button type="button" onClick={handleSendOtp} variant="secondary">
+              <Button type="button" onClick={handleSendOtp} variant="secondary" className="w-full md:w-auto bg-white/20 hover:bg-white/30 text-white border-0">
                 {otpSent ? 'Resend OTP' : 'Send OTP'}
               </Button>
             )}
           </div>
 
           {otpSent && !otpVerified && (
-            <div className="flex gap-2 items-end mt-2">
-              <div className="flex-1 space-y-2">
-                <Label htmlFor="otp">Enter OTP (use 1234)</Label>
+            <div className="flex flex-col md:flex-row gap-4 items-end mt-4 animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex-1 w-full space-y-2">
+                <Label htmlFor="otp" className="text-emerald-50">Enter OTP (use 1234)</Label>
                 <Input
                   id="otp"
                   value={otpValue}
                   onChange={(e) => setOtpValue(e.target.value)}
                   placeholder="Enter 4-digit OTP"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-emerald-100/50 focus-visible:ring-emerald-500"
                 />
               </div>
-              <Button type="button" onClick={handleVerifyOtp} variant="default">
+              <Button type="button" onClick={handleVerifyOtp} className="w-full md:w-auto bg-emerald-600 hover:bg-emerald-500 text-white">
                 Verify
               </Button>
             </div>
           )}
-          {otpVerified && <p className="text-green-600 text-sm font-medium">✓ Mobile verified successfully</p>}
+          {otpVerified && <p className="text-emerald-400 text-sm font-medium flex items-center gap-2">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-xs">✓</span>
+            Mobile verified successfully
+          </p>}
         </div>
 
         {/* Business Details */}
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Business Details</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-6 border border-white/20 rounded-xl bg-black/20 backdrop-blur-md space-y-5">
+          <h2 className="h3-bold border-b border-white/10 pb-3">Business Details</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" required />
+              <Label htmlFor="legalBusinessName" className="text-emerald-50">Legal Business Name</Label>
+              <Input id="legalBusinessName" name="legalBusinessName" required className="bg-white/10 border-white/20 text-white placeholder:text-emerald-100/50 focus-visible:ring-emerald-500" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="legalBusinessName">Legal Business Name</Label>
-              <Input id="legalBusinessName" name="legalBusinessName" required />
+              <Label htmlFor="storeName" className="text-emerald-50">Store Name</Label>
+              <Input id="storeName" name="storeName" required className="bg-white/10 border-white/20 text-white placeholder:text-emerald-100/50 focus-visible:ring-emerald-500" />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="storeName">Store Name</Label>
-              <Input id="storeName" name="storeName" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="pickupAddress">Pickup Address</Label>
-              <Input id="pickupAddress" name="pickupAddress" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="panNumber">PAN Number</Label>
-              <Input id="panNumber" name="panNumber" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" title="Enter a valid PAN" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="gstin">GSTIN</Label>
-              <Input id="gstin" name="gstin" pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$" title="Enter a valid GSTIN" required />
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="pickupAddress" className="text-emerald-50">Pickup Address</Label>
+              <Input id="pickupAddress" name="pickupAddress" required className="bg-white/10 border-white/20 text-white placeholder:text-emerald-100/50 focus-visible:ring-emerald-500" />
             </div>
           </div>
         </div>
 
-        {/* Bank Details */}
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Bank Details</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="accountHolderName">Account Holder Name</Label>
-              <Input id="accountHolderName" name="accountHolderName" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bankAccountNumber">Account Number</Label>
-              <Input id="bankAccountNumber" name="bankAccountNumber" type="text" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="ifsc">IFSC Code</Label>
-              <Input id="ifsc" name="ifsc" pattern="^[A-Z]{4}0[A-Z0-9]{6}$" title="Enter a valid IFSC code" required />
-            </div>
+        {error && (
+          <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-200 text-sm font-medium">
+            {error}
           </div>
-        </div>
+        )}
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        <div className="pt-4">
-          <Button type="submit" className="w-full md:w-auto" disabled={loading}>
+        <div className="pt-4 flex justify-end">
+          <Button type="submit" className="w-full md:w-auto bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition-all active:scale-95" disabled={loading}>
             {loading ? 'Saving...' : 'Save & Continue to Next Step'}
           </Button>
         </div>
