@@ -17,7 +17,17 @@ async function fetchProducts(): Promise<Product[]> {
       cache: 'no-store',
     })
     if (!res.ok) throw new Error('Failed to fetch from Spring Boot')
-    return await res.json()
+    const data = await res.json()
+
+    if (Array.isArray(data)) {
+      return data
+    }
+
+    if (Array.isArray(data?.content)) {
+      return data.content
+    }
+
+    throw new Error('Unexpected products response format')
   } catch (error) {
     console.warn('Backend unavailable, using demo data', error)
     return demoProducts

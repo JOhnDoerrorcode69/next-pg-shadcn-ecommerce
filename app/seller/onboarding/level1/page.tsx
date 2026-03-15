@@ -35,6 +35,25 @@ export default function Level1Page() {
     }
   }
 
+  const extractErrorMessage = async (response: Response, fallback: string) => {
+    try {
+      const contentType = response.headers.get('content-type') || ''
+      if (contentType.includes('application/json')) {
+        const data = await response.json()
+        if (typeof data?.details === 'string' && data.details.trim()) return data.details
+        if (typeof data?.error === 'string' && data.error.trim()) return data.error
+        if (typeof data?.message === 'string' && data.message.trim()) return data.message
+      } else {
+        const text = await response.text()
+        if (text.trim()) return text
+      }
+    } catch (parseError) {
+      console.warn('Unable to parse error response', parseError)
+    }
+
+    return fallback
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
@@ -66,7 +85,8 @@ export default function Level1Page() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to submit Level 1 details')
+        const errorMessage = await extractErrorMessage(response, 'Failed to submit Level 1 details')
+        throw new Error(errorMessage)
       }
 
       router.push('/seller/onboarding/level2')

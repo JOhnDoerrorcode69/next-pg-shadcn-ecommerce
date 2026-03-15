@@ -11,6 +11,38 @@ export default function Level2Page() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const extractErrorMessage = async (response: Response, fallback: string) => {
+    try {
+      const contentType = response.headers.get('content-type') || ''
+      if (contentType.includes('application/json')) {
+        const data = await response.json()
+        if (typeof data?.details === 'string' && data.details.trim()) return data.details
+        if (typeof data?.error === 'string' && data.error.trim()) return data.error
+        if (typeof data?.message === 'string' && data.message.trim()) return data.message
+      } else {
+        const text = await response.text()
+        if (text.trim()) return text
+      }
+    } catch (parseError) {
+      console.warn('Unable to parse error response', parseError)
+    }
+
+    return fallback
+  }
+
+  const getDocLabel = (docType: string) => {
+    const labels: Record<string, string> = {
+      PAN_PROOF: 'PAN proof',
+      BANK_PROOF: 'bank proof',
+      SIGNATORY_ID: 'signatory ID',
+      LIVE_SELFIE: 'live selfie',
+      ADDRESS_PROOF: 'address proof',
+      GST_CERT: 'GST certificate',
+      SHOP_IMAGE: 'shop image',
+    }
+    return labels[docType] || docType
+  }
+
   const uploadDocument = async (docType: string, file: File | null) => {
     if (!file) return null;
 
@@ -24,7 +56,8 @@ export default function Level2Page() {
     })
 
     if (!response.ok) {
-      throw new Error(`Failed to upload ${docType}`)
+      const errorMessage = await extractErrorMessage(response, `Failed to upload ${getDocLabel(docType)}`)
+      throw new Error(errorMessage)
     }
     return await response.json()
   }
@@ -79,7 +112,8 @@ export default function Level2Page() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to submit Level 2 details')
+        const errorMessage = await extractErrorMessage(response, 'Failed to submit Level 2 details')
+        throw new Error(errorMessage)
       }
 
       router.push('/seller/onboarding/category')
